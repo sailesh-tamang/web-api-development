@@ -1,61 +1,92 @@
 "use client";
 
+import Link from "next/link";
+import { Check, EyeOff } from "lucide-react";
+
 export default function Page() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-black to-zinc-900 px-4">
+      <div className="w-full max-w-sm text-white">
         {/* Header */}
-        <h1 className="text-3xl font-bold text-gray-900 text-center">
-          Fitness Tracking web
-        </h1>
-        <p className="text-sm text-gray-500 text-center mt-1">
-          Create your free account
-        </p>
+        <div className="space-y-1 mb-6">
+          <h1 className="text-2xl font-bold">Create Account</h1>
+          <p className="text-sm text-zinc-400">
+            Please Enter Your Credentials To Proceed
+          </p>
+        </div>
 
         {/* Form */}
-        <form className="mt-6 space-y-4">
-          <div>
-            <label className="text-sm text-gray-700">Full Name</label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
-            />
+        <form className="space-y-5">
+          {/* Full Name */}
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-200">Full Name</label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Sailesh Tamang"
+                className="h-11 w-full rounded-md border border-lime-400/80 bg-transparent px-3 text-sm outline-none
+                focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="text-sm text-gray-700">Email</label>
-            <input
-              type="email"
-              placeholder="you@blogify.com"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
-            />
+          {/* Phone */}
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-200">Phone</label>
+            <div className="relative">
+              <input
+                type="tel"
+                placeholder="+977-9876543210"
+                className="h-11 w-full rounded-md border border-lime-400/80 bg-transparent px-3 text-sm outline-none
+                focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="text-sm text-gray-700">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
-            />
+          {/* Email */}
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-200">Email</label>
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="sailesh@gmail.com"
+                className="h-11 w-full rounded-md border border-lime-400/80 bg-transparent px-3 pr-10 text-sm outline-none
+                focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
+              />
+              <Check className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-lime-400" />
+            </div>
           </div>
 
+          {/* Password */}
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-200">Password</label>
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="••••••••"
+                className="h-11 w-full rounded-md border border-lime-400/80 bg-transparent px-3 pr-10 text-sm outline-none
+                focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
+              />
+              <EyeOff className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-lime-400" />
+            </div>
+          </div>
+
+          {/* Create Account button */}
           <button
             type="submit"
-            className="w-full mt-2 rounded-lg bg-indigo-600 py-2.5 text-white font-semibold hover:bg-indigo-700 transition"
+            className="h-11 w-full rounded-md bg-lime-400 text-black font-semibold hover:opacity-90 transition"
           >
             Create Account
           </button>
-        </form>
 
-        {/* Footer */}
-        <p className="text-sm text-center text-gray-600 mt-6">
-          Already have an account?{" "}
-          <a href="/login" className="text-indigo-600 font-medium">
-            Login
-          </a>
-        </p>
+          {/* Footer */}
+          <div className="text-center text-sm text-zinc-300">
+            Already Have Account?{" "}
+            <Link href="/login" className="font-semibold text-lime-400 hover:underline">
+              Login!
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   );
