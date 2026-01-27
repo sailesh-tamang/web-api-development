@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { AuthRepository } from "./auth.repository";
 import { LoginDto, RegisterDto } from "./auth.dto";
 
