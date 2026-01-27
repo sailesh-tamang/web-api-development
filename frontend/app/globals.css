@@ -20,7 +20,25 @@
 }
 
 body {
-  background: var(--background);
+  background: var(--background) url('/images/hbg.png') no-repeat center/cover;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Rounded button utility for places where we want pill/capsule buttons */
+.btn-round {
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+}
+
+/* Fully circular button (use with fixed width/height) */
+.btn-circle {
+  border-radius: 9999px;
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
