@@ -7,10 +7,8 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6"
     style={{
-        // backgroundImage: "url('/images/image.png')",
+        backgroundImage: "url('/images/healthlogo.png')",
       }}>
-      <h1 className="text-3xl font-bold"> </h1>
-
       <div className="flex gap-4">
         <button
           onClick={() => router.push('/login')}

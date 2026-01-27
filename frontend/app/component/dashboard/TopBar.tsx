@@ -12,26 +12,13 @@ export default function TopBar() {
             fitness tracking
           </Link>
 
-          {/* <nav className="hidden items-center gap-5 text-sm text-black md:flex">
-            <Link href="#" className="hover:underline">For Women</Link>
-            <Link href="#" className="hover:underline">For Men</Link>
-            <Link href="#" className="hover:underline">New</Link>
-            <Link href="#" className="hover:underline">Special Collections</Link>
-          </nav> */}
         </div>
-
         <div className="flex items-center text-black gap-3 text-sm">
           <button 
             onClick={() => router.push('/login')}
             className="rounded-md border px-3 py-1.5 hover:bg-slate-50">
             Profile
           </button>
-          {/* <button className="rounded-md border px-3 py-1.5 hover:bg-slate-50">
-            Favorite
-          </button> */}
-          {/* <button className="rounded-md border px-3 py-1.5 hover:bg-slate-50">
-            Cart
-          </button> */}
         </div>
       </div>
     </header>
