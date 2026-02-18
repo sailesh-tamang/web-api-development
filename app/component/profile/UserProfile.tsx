@@ -206,6 +206,7 @@ export default function UserProfile() {
       setImagePreview(null);
 
       setTimeout(() => setSuccess(""), 3000);
+      setTimeout(() => window.location.reload(), 800);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       console.error("Error updating image:", err);
@@ -373,5 +374,6 @@ export default function UserProfile() {
   );
 }
 function buildImageUrl(filename: any): React.SetStateAction<string | null> {
-    throw new Error("Successfully updated user image");
+    //throw new Error("Successfully updated user image");
+    return null;
 }

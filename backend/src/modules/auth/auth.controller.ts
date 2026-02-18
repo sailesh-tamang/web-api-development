@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { registerDto, loginDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
+import { PasswordResetService } from "./password-reset.service";
 import bcrypt from "bcryptjs";
 import { AuthRepository } from "./auth.repository";
 
@@ -69,6 +70,22 @@ export const AuthController = {
     }
   },
 
+  async getAllUsers(req: Request, res: Response) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      if (page < 1 || limit < 1) {
+        return res.status(400).json({ ok: false, message: "Invalid pagination parameters" });
+      }
+
+      const result = await AuthRepository.findAllWithPagination({ page, limit });
+      return res.status(200).json({ ok: true, ...result });
+    } catch (err) {
+      return res.status(500).json({ ok: false, message: "Server error", err });
+    }
+  },
+
   async updateUser(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -82,6 +99,69 @@ export const AuthController = {
       const updated = await AuthRepository.updateUser(id as string, body as any);
       if (!updated) return res.status(404).json({ ok: false, message: "User not found" });
       return res.status(200).json({ ok: true, user: updated });
+    } catch (err) {
+      return res.status(500).json({ ok: false, message: "Server error", err });
+    }
+  },
+
+  async forgotPassword(req: Request, res: Response) {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ ok: false, message: "Email is required" });
+      }
+
+      const resetLinkBase = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password`;
+      const result = await PasswordResetService.requestPasswordReset(email, resetLinkBase);
+      
+      if (!result.ok) {
+        return res.status(400).json(result);
+      }
+
+      return res.status(200).json({
+        ok: true,
+        message: result.message,
+        token: result.token,
+        email: email
+      });
+    } catch (err) {
+      return res.status(500).json({ ok: false, message: "Server error", err });
+    }
+  },
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { token, email, newPassword, confirmPassword } = req.body;
+
+      if (!token || !email || !newPassword || !confirmPassword) {
+        return res.status(400).json({ ok: false, message: "Missing required fields" });
+      }
+
+      if (newPassword !== confirmPassword) {
+        return res.status(400).json({ ok: false, message: "Passwords do not match" });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ ok: false, message: "Password must be at least 6 characters" });
+      }
+
+      const result = await PasswordResetService.resetPassword(token, email, newPassword);
+      return res.status(result.ok ? 200 : 400).json(result);
+    } catch (err) {
+      return res.status(500).json({ ok: false, message: "Server error", err });
+    }
+  },
+
+  async validateResetToken(req: Request, res: Response) {
+    try {
+      const { token, email } = req.body;
+
+      if (!token || !email) {
+        return res.status(400).json({ ok: false, message: "Token and email are required" });
+      }
+
+      const result = await PasswordResetService.validateResetToken(token, email);
+      return res.status(result.ok ? 200 : 400).json(result);
     } catch (err) {
       return res.status(500).json({ ok: false, message: "Server error", err });
     }

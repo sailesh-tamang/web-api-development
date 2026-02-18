@@ -44,6 +44,7 @@ export default function CreateUserForm() {
     setIsLoading(true);
 
     try {
+      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const fd = new FormData();
       fd.append("name", formData.name);
       fd.append("email", formData.email);
@@ -51,7 +52,7 @@ export default function CreateUserForm() {
       fd.append("role", formData.role);
       if (image) fd.append("image", image);
 
-      const response = await fetch(`/api/auth/user`, {
+      const response = await fetch(`${base}/api/auth/user`, {
         method: "POST",
         body: fd,
       });

@@ -223,7 +223,7 @@
 .infoLabel {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #666666;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -231,7 +231,7 @@
 .infoValue {
   font-size: 16px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #000000;
 }
 
 .editIconBtn {
@@ -271,7 +271,7 @@
 .editLabel {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000;
 }
 
 .editInput {
@@ -279,7 +279,7 @@
   background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  color: var(--text-primary);
+  color: #000000;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.3s ease;

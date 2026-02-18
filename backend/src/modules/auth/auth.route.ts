@@ -7,6 +7,14 @@ const router = Router();
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 
+// Password reset routes
+router.post("/forgot-password", AuthController.forgotPassword);
+router.post("/reset-password", AuthController.resetPassword);
+router.post("/validate-reset-token", AuthController.validateResetToken);
+
+// Get all users (with pagination)
+router.get("/", AuthController.getAllUsers);
+
 // Create user via FormData (used by admin frontend creation form)
 router.post("/user", uploadSingle("image"), AuthController.createUser);
 

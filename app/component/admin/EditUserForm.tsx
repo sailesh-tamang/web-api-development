@@ -24,14 +24,8 @@ export default function EditUserForm({ userId }: EditUserFormProps) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No token found");
-        }
-
-        const response = await fetch(`/api/admin/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const response = await fetch(`${base}/api/auth/${userId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch user");
@@ -88,19 +82,14 @@ export default function EditUserForm({ userId }: EditUserFormProps) {
     setIsSaving(true);
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
+      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const fd = new FormData();
       fd.append("name", formData.name);
       fd.append("email", formData.email);
       if (image) fd.append("image", image);
 
-      const response = await fetch(`/api/admin/users/${userId}`, {
+      const response = await fetch(`${base}/api/auth/${userId}`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
         body: fd,
       });
 

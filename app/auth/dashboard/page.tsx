@@ -9,7 +9,6 @@ export default function Dashboard() {
       <TopBar />
       <Hero />
       <WalkingTracker />
-      
       <Footer />
     </div>
   );

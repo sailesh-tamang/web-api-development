@@ -1,0 +1,272 @@
+:root {
+  --primary-color: #22c55e;
+  --dark-bg: #1a1a1a;
+  --sidebar-bg: #242424;
+  --border-color: #22c55e;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --hover-color: #16a34a;
+}
+
+.container {
+  padding: 20px;
+  color: var(--text-primary);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+  color: var(--text-primary);
+}
+
+.controlsSection {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controlGroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.select,
+.searchInput {
+  padding: 8px 12px;
+  background-color: var(--sidebar-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.select:hover,
+.searchInput:hover {
+  border-color: var(--hover-color);
+}
+
+.select:focus,
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: rgba(34, 197, 94, 0.05);
+}
+
+.select option {
+  background-color: var(--sidebar-bg);
+  color: var(--text-primary);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table thead {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-color);
+}
+
+.table th:last-child {
+  border-right: none;
+  text-align: center;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(34, 197, 94, 0.05);
+}
+
+.table td {
+  padding: 14px 16px;
+  color: var(--text-primary);
+  border-right: 1px solid rgba(34, 197, 94, 0.1);
+}
+
+.table td:last-child {
+  border-right: none;
+  text-align: center;
+}
+
+.roleBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.roleBadge.admin {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid var(--primary-color);
+}
+
+.roleBadge.user {
+  background-color: rgba(76, 205, 196, 0.2);
+  color: #4ecdc4;
+  border: 1px solid #4ecdc4;
+}
+
+.actionButton {
+  padding: 6px 12px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.viewButton {
+  background-color: rgba(76, 205, 196, 0.2);
+  color: #4ecdc4;
+  border: 1px solid #4ecdc4;
+}
+
+.viewButton:hover {
+  background-color: rgba(76, 205, 196, 0.3);
+}
+
+.editButton {
+  background-color: rgba(0, 150, 255, 0.2);
+  color: #00d4ff;
+  border: 1px solid #00d4ff;
+}
+
+.editButton:hover {
+  background-color: rgba(0, 150, 255, 0.3);
+}
+
+.deleteButton {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #ff6b6b;
+  border: 1px solid #ef4444;
+}
+
+.deleteButton:hover {
+  background-color: rgba(239, 68, 68, 0.3);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.loadingState {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.paginationSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.paginationInfo {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.paginationControls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pageButton {
+  padding: 8px 12px;
+  background-color: var(--sidebar-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 40px;
+  text-align: center;
+}
+
+.pageButton:hover:not(:disabled) {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: var(--hover-color);
+}
+
+.pageButton.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.pageIndicator {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0 8px;
+}

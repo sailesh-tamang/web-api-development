@@ -1,6 +1,33 @@
+'use client';
+
+import { useState } from "react";
 import TopBar from "../component/dashboard/TopBar";
 
 export default function ExerciseTipsPage() {
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedTitle, setSelectedTitle] = useState<string>("");
+
+  // YouTube video IDs extracted from your links
+  const exerciseVideos = {
+    generalHealth: {
+      id: "8ef7FhmMcLU",
+      title: "General Health Exercises"
+    },
+    weightLoss: {
+      id: "Ammb_7sv_KA",
+      title: "Weight Loss Exercises"
+    },
+    muscleGain: {
+      id: "UIPvIYsjfpo",
+      title: "Muscle Gain Exercises"
+    },
+  };
+
+  const handleVideoClick = (videoId: string, title: string) => {
+    setSelectedVideo(videoId);
+    setSelectedTitle(title);
+  };
+
   return (
     <div className="min-h-screen bg-black">
       <TopBar />
@@ -31,25 +58,69 @@ export default function ExerciseTipsPage() {
               and what else you can do.
             </p>
 
+            {/* Video Player */}
+            {selectedVideo && (
+              <div className="mt-8 rounded-xl border border-lime-400/30 bg-black/60 p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-lime-400">{selectedTitle}</h3>
+                  <button
+                    onClick={() => setSelectedVideo(null)}
+                    className="text-xs text-slate-400 hover:text-white transition-colors"
+                  >
+                    ✕ Close
+                  </button>
+                </div>
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${selectedVideo}`}
+                    title={selectedTitle}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 h-full w-full"
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="mt-8 grid gap-4">
-              <div className="rounded-xl border border-white/10 bg-black/40 p-4">
-                <p className="text-sm font-semibold text-white">General Health</p>
+              <button 
+                onClick={() => handleVideoClick(exerciseVideos.generalHealth.id, exerciseVideos.generalHealth.title)}
+                className="rounded-xl border border-white/10 bg-black/40 p-4 text-left transition-all hover:border-lime-400/50 hover:bg-black/60 hover:shadow-lg hover:shadow-lime-400/10 active:scale-95"
+              >
+                <p className="text-sm font-semibold text-white flex items-center gap-2">
+                  General Health
+                  <span className="text-xs text-lime-400">▶ Watch Video</span>
+                </p>
                 <p className="mt-1 text-sm text-slate-300">
                   2 days/week, 150 mins moderate activity
                 </p>
-              </div>
-              <div className="rounded-xl border border-white/10 bg-black/40 p-4">
-                <p className="text-sm font-semibold text-white">Weight Loss</p>
+              </button>
+
+              <button 
+                onClick={() => handleVideoClick(exerciseVideos.weightLoss.id, exerciseVideos.weightLoss.title)}
+                className="rounded-xl border border-white/10 bg-black/40 p-4 text-left transition-all hover:border-lime-400/50 hover:bg-black/60 hover:shadow-lg hover:shadow-lime-400/10 active:scale-95"
+              >
+                <p className="text-sm font-semibold text-white flex items-center gap-2">
+                  Weight Loss
+                  <span className="text-xs text-lime-400">▶ Watch Video</span>
+                </p>
                 <p className="mt-1 text-sm text-slate-300">
                   3 days/week, mix of HIIT &amp; steady state
                 </p>
-              </div>
-              <div className="rounded-xl border border-white/10 bg-black/40 p-4">
-                <p className="text-sm font-semibold text-white">Muscle Gain</p>
+              </button>
+
+              <button 
+                onClick={() => handleVideoClick(exerciseVideos.muscleGain.id, exerciseVideos.muscleGain.title)}
+                className="rounded-xl border border-white/10 bg-black/40 p-4 text-left transition-all hover:border-lime-400/50 hover:bg-black/60 hover:shadow-lg hover:shadow-lime-400/10 active:scale-95"
+              >
+                <p className="text-sm font-semibold text-white flex items-center gap-2">
+                  Muscle Gain
+                  <span className="text-xs text-lime-400">▶ Watch Video</span>
+                </p>
                 <p className="mt-1 text-sm text-slate-300">
                   4–5 days/week, light activity (walking)
                 </p>
-              </div>
+              </button>
             </div>
           </div>
         </div>

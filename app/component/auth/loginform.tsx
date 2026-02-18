@@ -89,7 +89,12 @@ export default function LoginForm() {
         error={errors.password?.message}
       />
 
-      <Button type="submit" disabled={loading}>{loading ? "Signing in..." : "Login"}</Button>
+      <Button type="submit" disabled={loading}>{loading ? "Signing in..." : "Login"}</Button>      
+      <p className="text-center text-sm text-gray-300">
+        <a href="/forget-password" className="font-medium text-blue-400 hover:underline">
+          Forgot password?
+        </a>
+      </p>
       <p className="text-center text-sm text-gray-300">
         Don’t have an account?{" "}
         <a href="/register" className="font-medium text-blue-400 hover:underline">
