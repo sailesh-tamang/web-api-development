@@ -5,6 +5,9 @@ interface CreateUserData {
   email: string;
   password: string;
   role: string;
+  age?: number;
+  height?: number;
+  weight?: number;
 }
 
 interface PaginationOptions {

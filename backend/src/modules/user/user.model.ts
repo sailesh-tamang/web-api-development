@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true }, // hashed password
     image: { type: String },
+    age: { type: Number },
+    height: { type: Number }, // in feet
+    weight: { type: Number }, // in kg
     role: {
       type: String,
       enum: ["user", "admin"],

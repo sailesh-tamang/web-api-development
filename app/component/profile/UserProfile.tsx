@@ -6,6 +6,9 @@ export default function UserProfile() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    age: "",
+    height: "",
+    weight: "",
   });
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -17,6 +20,8 @@ export default function UserProfile() {
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [isHydrated, setIsHydrated] = useState(false);
+  const [bmi, setBmi] = useState<number | null>(null);
+  const [bmiCategory, setBmiCategory] = useState<string>("");
 
   // Fetch user data on mount
   useEffect(() => {
@@ -57,7 +62,13 @@ export default function UserProfile() {
                 const data = await res.json();
                   const user = data.user || data;
                   console.log("User data from API:", user);
-                  setFormData({ name: user.name || "", email: user.email || "" });
+                  setFormData({ 
+                    name: user.name || "", 
+                    email: user.email || "",
+                    age: user.age || "",
+                    height: user.height || "",
+                    weight: user.weight || ""
+                  });
                   if (user.image) setCurrentImage(buildImageUrl(user.image));
                   // keep localStorage in sync (store raw user object from server)
                   localStorage.setItem("user", JSON.stringify(user));
@@ -73,7 +84,13 @@ export default function UserProfile() {
         if (stored) {
           const user = JSON.parse(stored);
           console.log("User data from localStorage:", user);
-          setFormData({ name: user.name || "", email: user.email || "" });
+          setFormData({ 
+            name: user.name || "", 
+            email: user.email || "",
+            age: user.age || "",
+            height: user.height || "",
+            weight: user.weight || ""
+          });
           if (user.image) setCurrentImage(buildImageUrl(user.image));
         } else {
           setError("No user data found. Please log in again.");
@@ -215,6 +232,49 @@ export default function UserProfile() {
     }
   };
 
+  const calculateBMI = () => {
+    const height = parseFloat(formData.height);
+    const weight = parseFloat(formData.weight);
+
+    // Check if both height and weight are valid numbers
+    if (!height || !weight || height <= 0 || weight <= 0) {
+      setError("Please fill in both height and weight in your profile to calculate BMI.");
+      setTimeout(() => setError(""), 4000);
+      return;
+    }
+
+    // BMI = weight (kg) / (height (m))^2
+    // Convert height from feet to meters (1 foot = 0.3048 meters)
+    const heightInMeters = height * 0.3048;
+    const calculatedBMI = weight / (heightInMeters * heightInMeters);
+    
+    setBmi(calculatedBMI);
+
+    // Determine BMI category
+    let category = "";
+    if (calculatedBMI < 18.5) {
+      category = "Underweight";
+    } else if (calculatedBMI >= 18.5 && calculatedBMI < 25) {
+      category = "Normal weight";
+    } else if (calculatedBMI >= 25 && calculatedBMI < 30) {
+      category = "Overweight";
+    } else {
+      category = "Obese";
+    }
+    
+    setBmiCategory(category);
+    setSuccess(`BMI calculated successfully: ${calculatedBMI.toFixed(1)}`);
+    setTimeout(() => setSuccess(""), 4000);
+  };
+
+  const getBMIColor = () => {
+    if (!bmi) return "";
+    if (bmi < 18.5) return "#3b82f6"; // blue for underweight
+    if (bmi >= 18.5 && bmi < 25) return "#22c55e"; // green for normal
+    if (bmi >= 25 && bmi < 30) return "#f59e0b"; // orange for overweight
+    return "#ef4444"; // red for obese
+  };
+
   if (!isHydrated) {
     return (
       <div className={styles.loadingContainer}>
@@ -332,17 +392,82 @@ export default function UserProfile() {
                   </svg>
                 </button>
               </div>
+
+              <div className={styles.infoItem}>
+                <div className={styles.infoContent}>
+                  <span className={styles.infoLabel}>Age</span>
+                  <span className={styles.infoValue}>{formData.age ? `${formData.age} years` : "-"}</span>
+                </div>
+                <button
+                  className={styles.editIconBtn}
+                  onClick={() => handleEditClick("age", formData.age)}
+                  title="Edit age"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div className={styles.infoItem}>
+                <div className={styles.infoContent}>
+                  <span className={styles.infoLabel}>Height</span>
+                  <span className={styles.infoValue}>{formData.height ? `${formData.height} ft` : "-"}</span>
+                </div>
+                <button
+                  className={styles.editIconBtn}
+                  onClick={() => handleEditClick("height", formData.height)}
+                  title="Edit height"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div className={styles.infoItem}>
+                <div className={styles.infoContent}>
+                  <span className={styles.infoLabel}>Weight</span>
+                  <span className={styles.infoValue}>{formData.weight ? `${formData.weight} kg` : "-"}</span>
+                </div>
+                <button
+                  className={styles.editIconBtn}
+                  onClick={() => handleEditClick("weight", formData.weight)}
+                  title="Edit weight"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+              </div>
             </>
           ) : (
             <div className={styles.editForm}>
               <div className={styles.editFormGroup}>
-                <label className={styles.editLabel}>{editingField === "name" ? "Full Name" : "Email"}</label>
+                <label className={styles.editLabel}>
+                  {editingField === "name" && "Full Name"}
+                  {editingField === "email" && "Email"}
+                  {editingField === "age" && "Age (years)"}
+                  {editingField === "height" && "Height (ft)"}
+                  {editingField === "weight" && "Weight (kg)"}
+                </label>
                 <input
-                  type={editingField === "email" ? "email" : "text"}
+                  type={editingField === "email" ? "email" : editingField === "name" ? "text" : "number"}
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   className={styles.editInput}
-                  placeholder={editingField === "name" ? "Enter your name" : "Enter your email"}
+                  placeholder={
+                    editingField === "name" ? "Enter your name" :
+                    editingField === "email" ? "Enter your email" :
+                    editingField === "age" ? "Enter your age" :
+                    editingField === "height" ? "Enter your height in ft" :
+                    "Enter your weight in kg"
+                  }
+                  min={editingField !== "name" && editingField !== "email" ? "0" : undefined}
+                  step={editingField === "height" || editingField === "weight" ? "0.1" : "1"}
                 />
               </div>
               <div className={styles.editButtonGroup}>
@@ -363,6 +488,52 @@ export default function UserProfile() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* BMI Calculator Section */}
+        <div className={styles.bmiSection}>
+          <div className={styles.bmiHeader}>
+            <h3 className={styles.bmiTitle}>Body Mass Index (BMI)</h3>
+            <button
+              className={styles.calculateBmiBtn}
+              onClick={calculateBMI}
+              disabled={!formData.height || !formData.weight}
+            >
+              Calculate BMI
+            </button>
+          </div>
+          
+          {bmi !== null && (
+            <div className={styles.bmiResult}>
+              <div className={styles.bmiValue} style={{ color: getBMIColor() }}>
+                <span className={styles.bmiNumber}>{bmi.toFixed(1)}</span>
+                <span className={styles.bmiUnit}>kg/m²</span>
+              </div>
+              <div className={styles.bmiCategory} style={{ borderColor: getBMIColor() }}>
+                {bmiCategory}
+              </div>
+              <div className={styles.bmiScale}>
+                <div className={styles.bmiScaleItem}>
+                  <span style={{ color: "#3b82f6" }}>●</span> Underweight (&lt;18.5)
+                </div>
+                <div className={styles.bmiScaleItem}>
+                  <span style={{ color: "#22c55e" }}>●</span> Normal (18.5-24.9)
+                </div>
+                <div className={styles.bmiScaleItem}>
+                  <span style={{ color: "#f59e0b" }}>●</span> Overweight (25-29.9)
+                </div>
+                <div className={styles.bmiScaleItem}>
+                  <span style={{ color: "#ef4444" }}>●</span> Obese (≥30)
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {!formData.height || !formData.weight ? (
+            <p className={styles.bmiHint}>
+              💡 Add your height and weight to your profile to calculate BMI
+            </p>
+          ) : null}
         </div>
 
         {/* Delete Account */}

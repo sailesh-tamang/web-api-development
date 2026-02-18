@@ -21,11 +21,12 @@ export default function TopBar() {
   };
 
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-black/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <div className="flex items-center text-white gap-8">
-          <Link href="/auth/dashboard" className="text-lg font-bold text-white">
-            Fitness Tracking App
+          <Link href="/auth/dashboard" className="flex items-center gap-3 text-lg font-bold text-white">
+            <img src="/images/fitness-logo.svg" alt="Fitness Logo" className="h-8 w-8" />
+            <span>Fitness Tracking</span>
           </Link>
 
           

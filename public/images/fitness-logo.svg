@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Walking person icon in lime green -->
+  <g fill="#C4F82A">
+    <!-- Head -->
+    <circle cx="105" cy="30" r="15"/>
+    
+    <!-- Body and legs in walking position -->
+    <path d="M105 50 L105 95 L85 130 L75 155 L90 160 L105 125 L105 95 L120 130 L125 155 L140 150 L125 125 L105 95"/>
+    
+    <!-- Arms with walking stick -->
+    <path d="M105 60 L85 75 L75 100"/>
+    <path d="M105 65 L125 80 L135 105"/>
+    
+    <!-- Walking stick -->
+    <line x1="75" y1="100" x2="75" y2="150" stroke="#C4F82A" stroke-width="5" stroke-linecap="round"/>
+    
+    <!-- Base line -->
+    <rect x="60" y="165" width="80" height="8" rx="4"/>
+  </g>
+</svg>
