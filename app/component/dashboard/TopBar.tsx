@@ -1,11 +1,16 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 export default function TopBar() {
   const router = useRouter();
-  const isLoggedIn = !!Cookies.get("token");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!Cookies.get("token"));
+  }, []);
 
   const handleProfileClick = () => {
     if (isLoggedIn) {
@@ -16,39 +21,48 @@ export default function TopBar() {
   };
 
   return (
-    <header className="sticky top-0 z-20 border-b bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-black/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <div className="flex items-center text-slate-900 gap-8">
-          <Link href="/auth/dashboard" className="text-lg font-bold">
+        <div className="flex items-center text-white gap-8">
+          <Link href="/auth/dashboard" className="text-lg font-bold text-white">
             Fitness Tracking App
           </Link>
 
-          {/* <nav className="hidden items-center gap-5 text-sm text-black md:flex">
-            <Link href="#" className="hover:underline">For Women</Link>
-            <Link href="#" className="hover:underline">For Men</Link>
-            <Link href="#" className="hover:underline">New</Link>
-            <Link href="#" className="hover:underline">Special Collections</Link>
-          </nav> */}
+          
         </div>
 
         <div className="flex items-center text-black gap-3 text-sm">
-          <button 
+          <Link
+            href="/exercise-tips"
+            className="rounded-md bg-lime-400 px-3 py-1.5 text-black hover:bg-lime-300"
+          >
+            Exercise Tips
+          </Link>
+          <Link
+            href="/meal-plan"
+            className="rounded-md bg-lime-400 px-3 py-1.5 text-black hover:bg-lime-300"
+          >
+            Meal Plan
+          </Link>
+          <button
             onClick={handleProfileClick}
-            className="rounded-md border px-3 py-1.5 hover:bg-slate-50">
+            className="rounded-md bg-lime-400 px-3 py-1.5 text-black hover:bg-lime-300"
+          >
             Profile
           </button>
           {isLoggedIn && (
-            <button 
+            <button
               onClick={() => {
                 Cookies.remove("token");
                 Cookies.remove("user");
+                setIsLoggedIn(false);
                 router.push("/login");
               }}
-              className="rounded-md border px-3 py-1.5 hover:bg-slate-50">
+              className="rounded-md bg-lime-400 px-3 py-1.5 text-black hover:bg-lime-300"
+            >
               Logout
             </button>
           )}
-          
         </div>
       </div>
     </header>

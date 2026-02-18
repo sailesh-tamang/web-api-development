@@ -1,16 +1,22 @@
 :root {
   --primary-color: #4488ff;
   --primary-light: #5599ff;
-  --dark-bg: #f5f5f5;
-  --card-bg: #ffffff;
-  --border-color: #e0e0e0;
-  --text-primary: #1a1a1a;
-  --text-secondary: #666666;
+
+  /* DARK THEME */
+  --dark-bg: #000000;
+  --card-bg: #111111;
+  --border-color: #2a2a2a;
+
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+
   --success-color: #4ade80;
   --error-color: #ff6b6b;
-  --input-bg: #f9f9f9;
-  --input-border: #e0e0e0;
+
+  --input-bg: #111111;
+  --input-border: #333333;
 }
+
 
 .container {
   min-height: 100vh;
@@ -367,4 +373,78 @@
   &:hover {
     background-color: rgba(255, 107, 107, 0.1);
   }
+}
+
+/* BMI Section */
+.bmiSection {
+  margin-top: 16px;
+  padding: 20px;
+  background-color: #0b0b0b;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+}
+
+.sectionTitle {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bmiForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.bmiField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bmiLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.bmiInput {
+  padding: 10px 12px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.bmiButton {
+  grid-column: 1 / -1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bmiButton:hover {
+  background-color: var(--primary-light);
+}
+
+.bmiResult {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.bmiValue {
+  font-weight: 700;
+  color: var(--text-primary);
 }
