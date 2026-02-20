@@ -1,14 +1,12 @@
 import TopBar from "../../component/dashboard/TopBar";
-import Hero from "../../component/dashboard/hero";
+import Dashboard from "../../component/dashboard/Dashboard";
 import Footer from "../../component/dashboard/Footer";
-import WalkingTracker from "../../component/dashboard/WalkingTracker";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-black">
       <TopBar />
-      <Hero />
-      <WalkingTracker />
+      <Dashboard />
       <Footer />
     </div>
   );

@@ -6,6 +6,8 @@ import TopBar from "../component/dashboard/TopBar";
 export default function MealPlanPage() {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [selectedTitle, setSelectedTitle] = useState<string>("");
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const mealPlanImage = "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=900";
 
   // YouTube meal plan video IDs
   const mealVideos = {
@@ -23,19 +25,21 @@ export default function MealPlanPage() {
     },
   };
 
-  const handleVideoClick = (videoId: string, title: string) => {
+  const handleVideoClick = (videoId: string, title: string, group?: string) => {
     setSelectedVideo(videoId);
     setSelectedTitle(title);
+    setSelectedGroup(group ?? null);
   };
   return (
     <div className="min-h-screen bg-black">
       <TopBar />
       <main className="px-5 py-12 text-white">
-        <div className="mx-auto w-full max-w-2xl">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg shadow-black/30">
-            <div className="mx-auto w-fit rounded-full bg-lime-400 px-6 py-2 text-center text-sm font-semibold text-black">
-              Meal Plan
-            </div>
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] items-start">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg shadow-black/30">
+              <div className="mx-auto w-fit rounded-full bg-lime-400 px-6 py-2 text-center text-sm font-semibold text-black">
+                Meal Plan
+              </div>
 
             <div className="mt-6 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide text-slate-300">
               <span className="rounded-full border border-white/15 px-3 py-1">
@@ -57,33 +61,9 @@ export default function MealPlanPage() {
               and consistent habits that support your fitness goal.
             </p>
 
-            {/* Video Player */}
-            {selectedVideo && (
-              <div className="mt-8 rounded-xl border border-lime-400/30 bg-black/60 p-4">
-                <div className="mb-3 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-lime-400">{selectedTitle}</h3>
-                  <button
-                    onClick={() => setSelectedVideo(null)}
-                    className="text-xs text-slate-400 hover:text-white transition-colors"
-                  >
-                    ✕ Close
-                  </button>
-                </div>
-                <div className="relative aspect-video w-full overflow-hidden rounded-lg">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${selectedVideo}`}
-                    title={selectedTitle}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 h-full w-full"
-                  />
-                </div>
-              </div>
-            )}
-
             <div className="mt-8 grid gap-4">
               <button
-                onClick={() => handleVideoClick(mealVideos.weightLoss.id, mealVideos.weightLoss.title)}
+                onClick={() => handleVideoClick(mealVideos.weightLoss.id, mealVideos.weightLoss.title, "weightLoss")}
                 className="rounded-xl border border-white/10 bg-black/40 p-4 text-left transition-all hover:border-lime-400/50 hover:bg-black/60 hover:shadow-lg hover:shadow-lime-400/10 active:scale-95"
               >
                 <p className="text-sm font-semibold text-white flex items-center gap-2">
@@ -94,9 +74,34 @@ export default function MealPlanPage() {
                   High protein, lower sugar, and portion control
                 </p>
               </button>
+              {selectedGroup === "weightLoss" && selectedVideo && (
+                <div className="rounded-xl border border-lime-400/30 bg-black/60 p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-lime-400">{selectedTitle}</h3>
+                    <button
+                      onClick={() => {
+                        setSelectedVideo(null);
+                        setSelectedGroup(null);
+                      }}
+                      className="text-xs text-slate-400 hover:text-white transition-colors"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${selectedVideo}`}
+                      title={selectedTitle}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                </div>
+              )}
 
               <button
-                onClick={() => handleVideoClick(mealVideos.maintenance.id, mealVideos.maintenance.title)}
+                onClick={() => handleVideoClick(mealVideos.maintenance.id, mealVideos.maintenance.title, "maintenance")}
                 className="rounded-xl border border-white/10 bg-black/40 p-4 text-left transition-all hover:border-lime-400/50 hover:bg-black/60 hover:shadow-lg hover:shadow-lime-400/10 active:scale-95"
               >
                 <p className="text-sm font-semibold text-white flex items-center gap-2">
@@ -107,9 +112,34 @@ export default function MealPlanPage() {
                   Balanced calories with whole foods
                 </p>
               </button>
+              {selectedGroup === "maintenance" && selectedVideo && (
+                <div className="rounded-xl border border-lime-400/30 bg-black/60 p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-lime-400">{selectedTitle}</h3>
+                    <button
+                      onClick={() => {
+                        setSelectedVideo(null);
+                        setSelectedGroup(null);
+                      }}
+                      className="text-xs text-slate-400 hover:text-white transition-colors"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${selectedVideo}`}
+                      title={selectedTitle}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                </div>
+              )}
 
               <button
-                onClick={() => handleVideoClick(mealVideos.muscleGain.id, mealVideos.muscleGain.title)}
+                onClick={() => handleVideoClick(mealVideos.muscleGain.id, mealVideos.muscleGain.title, "muscleGain")}
                 className="rounded-xl border border-white/10 bg-black/40 p-4 text-left transition-all hover:border-lime-400/50 hover:bg-black/60 hover:shadow-lg hover:shadow-lime-400/10 active:scale-95"
               >
                 <p className="text-sm font-semibold text-white flex items-center gap-2">
@@ -120,9 +150,46 @@ export default function MealPlanPage() {
                   Calorie surplus with protein each meal
                 </p>
               </button>
+              {selectedGroup === "muscleGain" && selectedVideo && (
+                <div className="rounded-xl border border-lime-400/30 bg-black/60 p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-lime-400">{selectedTitle}</h3>
+                    <button
+                      onClick={() => {
+                        setSelectedVideo(null);
+                        setSelectedGroup(null);
+                      }}
+                      className="text-xs text-slate-400 hover:text-white transition-colors"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${selectedVideo}`}
+                      title={selectedTitle}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-
-            
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
+              <div className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-black/40">
+                <img
+                  src={mealPlanImage}
+                  alt="Healthy meal plan"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-60" />
+              </div>
+            </div>
           </div>
         </div>
       </main>

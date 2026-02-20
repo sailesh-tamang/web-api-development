@@ -217,7 +217,7 @@ export default function WalkingTracker() {
   };
 
   return (
-    <section className="bg-black px-6 pb-16">
+    <section className="bg-black px-6 pb-16 flex justify-center">
       <div className="mx-auto w-full max-w-4xl rounded-2xl border border-white/10 bg-white/5 p-6 text-white shadow-lg shadow-black/30">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
