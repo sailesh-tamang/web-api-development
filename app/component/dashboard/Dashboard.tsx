@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import WalkingTracker from "./WalkingTracker";
+import WorkoutDetailsModal from "./WorkoutDetailsModal";
+import { workoutDetailsData } from "./workoutData";
+import { mealPlanData } from "../meal/mealPlanData";
 
 const images = {
   hero: "https://i.pinimg.com/736x/a0/1d/6e/a01d6eb20afe2f8e9aed9e32ac861bbc.jpg",
@@ -101,6 +104,8 @@ const achievements = [
 
 export default function Dashboard() {
   const [strokeDashoffset, setStrokeDashoffset] = useState(0);
+  const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
+  const [selectedMealDay, setSelectedMealDay] = useState(0);
 
   useEffect(() => {
     const targetOffset = (3 - (7200 / 10000)) * 226; // 226 is circumference
@@ -252,7 +257,9 @@ export default function Dashboard() {
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-400">{workout.burned}</span>
-                    <button className="px-4 py-2 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 text-xs">
+                    <button 
+                      onClick={() => setSelectedWorkout(workout.name)}
+                      className="px-4 py-2 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 text-xs">
                       Start
                     </button>
                   </div>
@@ -332,56 +339,190 @@ export default function Dashboard() {
       {/* ===================== MEAL PLAN SECTION ===================== */}
       <section className="relative px-4 py-20">
         <div className="mx-auto w-full max-w-6xl">
-          <h2 className="text-3xl font-bold text-white mb-12">Today's Meal Plan</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {meals.map((meal, idx) => (
-              <div
-                key={idx}
-                className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10"
-              >
-                {/* Image Banner */}
+          <div className="space-y-8">
+            {/* Header with Day Selector */}
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold text-white">Today's Meal Plan</h2>
+              <p className="text-gray-400">
+                {mealPlanData[selectedMealDay].day} - {mealPlanData[selectedMealDay].theme}
+              </p>
+              
+              {/* Day Selector Buttons */}
+              <div className="flex flex-wrap gap-2">
+                {mealPlanData.map((dayPlan, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedMealDay(idx)}
+                    className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 text-sm ${
+                      idx === selectedMealDay
+                        ? 'bg-[#A3E635] text-black shadow-lg shadow-[#A3E635]/50'
+                        : 'bg-white/10 text-gray-300 border border-white/20 hover:bg-white/20'
+                    }`}
+                  >
+                    {dayPlan.day}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Meal Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Breakfast */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10">
                 <div className="relative h-40 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-900">
                   <img
-                    src={meal.image}
-                    alt={meal.name}
+                    src={mealPlanData[selectedMealDay].meals.breakfast.image}
+                    alt="Breakfast"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  <h3 className="absolute bottom-4 left-4 text-xl font-bold text-white">{meal.name}</h3>
+                  <h3 className="absolute bottom-4 left-4 text-xl font-bold text-white">Breakfast</h3>
                 </div>
-
-                {/* Content */}
                 <div className="p-5 space-y-4">
-                  <p className="text-sm text-gray-400">{meal.items}</p>
-
-                  {/* Macros */}
+                  <p className="text-sm text-gray-400">{mealPlanData[selectedMealDay].meals.breakfast.items}</p>
                   <div className="grid grid-cols-3 gap-2 py-3 border-y border-white/10">
                     <div className="text-center">
                       <p className="text-xs text-gray-400">Protein</p>
-                      <p className="text-sm font-bold text-[#A3E635]">{meal.macros.protein}g</p>
+                      <p className="text-sm font-bold text-[#A3E635]">{mealPlanData[selectedMealDay].meals.breakfast.macros.protein}g</p>
                     </div>
                     <div className="text-center">
                       <p className="text-xs text-gray-400">Carbs</p>
-                      <p className="text-sm font-bold text-blue-400">{meal.macros.carbs}g</p>
+                      <p className="text-sm font-bold text-blue-400">{mealPlanData[selectedMealDay].meals.breakfast.macros.carbs}g</p>
                     </div>
                     <div className="text-center">
                       <p className="text-xs text-gray-400">Fat</p>
-                      <p className="text-sm font-bold text-orange-400">{meal.macros.fat}g</p>
+                      <p className="text-sm font-bold text-orange-400">{mealPlanData[selectedMealDay].meals.breakfast.macros.fat}g</p>
                     </div>
                   </div>
-
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-white">{meal.calories} kcal</span>
+                    <span className="text-sm font-bold text-white">{mealPlanData[selectedMealDay].meals.breakfast.calories} kcal</span>
                     <button className="px-4 py-2 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 text-xs">
                       View Plan
                     </button>
                   </div>
                 </div>
               </div>
-            ))}
+
+              {/* Lunch */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10">
+                <div className="relative h-40 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-900">
+                  <img
+                    src={mealPlanData[selectedMealDay].meals.lunch.image}
+                    alt="Lunch"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <h3 className="absolute bottom-4 left-4 text-xl font-bold text-white">Lunch</h3>
+                </div>
+                <div className="p-5 space-y-4">
+                  <p className="text-sm text-gray-400">{mealPlanData[selectedMealDay].meals.lunch.items}</p>
+                  <div className="grid grid-cols-3 gap-2 py-3 border-y border-white/10">
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400">Protein</p>
+                      <p className="text-sm font-bold text-[#A3E635]">{mealPlanData[selectedMealDay].meals.lunch.macros.protein}g</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400">Carbs</p>
+                      <p className="text-sm font-bold text-blue-400">{mealPlanData[selectedMealDay].meals.lunch.macros.carbs}g</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400">Fat</p>
+                      <p className="text-sm font-bold text-orange-400">{mealPlanData[selectedMealDay].meals.lunch.macros.fat}g</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-white">{mealPlanData[selectedMealDay].meals.lunch.calories} kcal</span>
+                    <button className="px-4 py-2 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 text-xs">
+                      View Plan
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dinner */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10">
+                <div className="relative h-40 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-900">
+                  <img
+                    src={mealPlanData[selectedMealDay].meals.dinner.image}
+                    alt="Dinner"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <h3 className="absolute bottom-4 left-4 text-xl font-bold text-white">Dinner</h3>
+                </div>
+                <div className="p-5 space-y-4">
+                  <p className="text-sm text-gray-400">{mealPlanData[selectedMealDay].meals.dinner.items}</p>
+                  <div className="grid grid-cols-3 gap-2 py-3 border-y border-white/10">
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400">Protein</p>
+                      <p className="text-sm font-bold text-[#A3E635]">{mealPlanData[selectedMealDay].meals.dinner.macros.protein}g</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400">Carbs</p>
+                      <p className="text-sm font-bold text-blue-400">{mealPlanData[selectedMealDay].meals.dinner.macros.carbs}g</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400">Fat</p>
+                      <p className="text-sm font-bold text-orange-400">{mealPlanData[selectedMealDay].meals.dinner.macros.fat}g</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-white">{mealPlanData[selectedMealDay].meals.dinner.calories} kcal</span>
+                    <button className="px-4 py-2 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 text-xs">
+                      View Plan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Daily Summary */}
+            <div className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-md p-6 hover:border-white/20 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4">Daily Totals</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <p className="text-xs text-gray-400 mb-1">Total Calories</p>
+                  <p className="text-2xl font-bold text-[#A3E635]">
+                    {mealPlanData[selectedMealDay].meals.breakfast.calories +
+                      mealPlanData[selectedMealDay].meals.lunch.calories +
+                      mealPlanData[selectedMealDay].meals.dinner.calories}
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <p className="text-xs text-gray-400 mb-1">Total Protein</p>
+                  <p className="text-2xl font-bold text-[#A3E635]">
+                    {mealPlanData[selectedMealDay].meals.breakfast.macros.protein +
+                      mealPlanData[selectedMealDay].meals.lunch.macros.protein +
+                      mealPlanData[selectedMealDay].meals.dinner.macros.protein}g
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <p className="text-xs text-gray-400 mb-1">Total Carbs</p>
+                  <p className="text-2xl font-bold text-blue-400">
+                    {mealPlanData[selectedMealDay].meals.breakfast.macros.carbs +
+                      mealPlanData[selectedMealDay].meals.lunch.macros.carbs +
+                      mealPlanData[selectedMealDay].meals.dinner.macros.carbs}g
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <p className="text-xs text-gray-400 mb-1">Total Fat</p>
+                  <p className="text-2xl font-bold text-orange-400">
+                    {mealPlanData[selectedMealDay].meals.breakfast.macros.fat +
+                      mealPlanData[selectedMealDay].meals.lunch.macros.fat +
+                      mealPlanData[selectedMealDay].meals.dinner.macros.fat}g
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -441,6 +582,14 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+
+      {/* ===================== WORKOUT MODAL ===================== */}
+      {selectedWorkout && workoutDetailsData[selectedWorkout] && (
+        <WorkoutDetailsModal
+          {...workoutDetailsData[selectedWorkout]}
+          onClose={() => setSelectedWorkout(null)}
+        />
+      )}
 
     </div>
   );

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
 import uploadSingle from "../../middleware/upload.middleware";
+import { adminOnly } from "../../middleware/admin.middleware";
 
 const router = Router();
 
@@ -20,6 +21,9 @@ router.post("/user", uploadSingle("image"), AuthController.createUser);
 
 // Update user (allow image upload)
 router.put("/:id", uploadSingle("image"), AuthController.updateUser);
+
+// Delete user (admin only)
+router.delete("/:id", adminOnly, AuthController.deleteUser);
 
 // Get user by id (for profile fetching)
 router.get("/:id", AuthController.getUser);

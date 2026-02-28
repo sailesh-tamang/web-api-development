@@ -166,4 +166,17 @@ export const AuthController = {
       return res.status(500).json({ ok: false, message: "Server error", err });
     }
   },
+
+  async deleteUser(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const deleted = await AuthRepository.deleteUser(id as string);
+      if (!deleted) {
+        return res.status(404).json({ ok: false, message: "User not found" });
+      }
+      return res.status(200).json({ ok: true, message: "User deleted successfully" });
+    } catch (err) {
+      return res.status(500).json({ ok: false, message: "Server error", err });
+    }
+  },
 };

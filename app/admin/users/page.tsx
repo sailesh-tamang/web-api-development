@@ -55,15 +55,22 @@ export default function AdminUsersPage() {
 
     try {
       const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const token = localStorage.getItem("token");
+      
       const res = await fetch(`${base}/api/auth/${userId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
       if (res.ok) {
         alert("User deleted successfully");
         fetchUsers(pagination.currentPage, itemsPerPage);
       } else {
-        alert("Failed to delete user");
+        const data = await res.json();
+        alert(`Failed to delete user: ${data.message || "Unknown error"}`);
       }
     } catch (err) {
       console.error("Delete error:", err);
