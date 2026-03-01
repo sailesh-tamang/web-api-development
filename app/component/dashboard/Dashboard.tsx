@@ -3,8 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import WalkingTracker from "./WalkingTracker";
 import WorkoutDetailsModal from "./WorkoutDetailsModal";
+import StartWorkoutModal from "./StartWorkoutModal";
+import WorkoutReportsModal from "./WorkoutReportsModal";
 import { workoutDetailsData } from "./workoutData";
 import { mealPlanData } from "../meal/mealPlanData";
+import { workoutService } from "@/app/lib/workoutService";
 
 const images = {
   hero: "https://i.pinimg.com/736x/a0/1d/6e/a01d6eb20afe2f8e9aed9e32ac861bbc.jpg",
@@ -15,14 +18,6 @@ const images = {
   meal: "https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?w=1200&h=800&fit=crop",
   lifestyle: "https://images.pexels.com/photos/3379934/pexels-photo-3379934.jpeg?w=1200&h=800&fit=crop",
 };
-
-// Quick Stats Data
-const quickStats = [
-  { label: "Steps Today", value: "8,432", trend: "↑", change: "+2.1%", color: "from-emerald-500/20 to-emerald-600/20" },
-  { label: "Distance", value: "6.4 km", trend: "↑", change: "+1.8%", color: "from-blue-500/20 to-blue-600/20" },
-  { label: "Calories Burned", value: "524 kcal", trend: "↓", change: "-3.2%", color: "from-orange-500/20 to-orange-600/20" },
-  { label: "Active Minutes", value: "45 min", trend: "↑", change: "+5.4%", color: "from-purple-500/20 to-purple-600/20" },
-];
 
 // Workouts Data
 const workouts = [
@@ -106,11 +101,64 @@ export default function Dashboard() {
   const [strokeDashoffset, setStrokeDashoffset] = useState(0);
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
   const [selectedMealDay, setSelectedMealDay] = useState(0);
+  const [isStartWorkoutModalOpen, setIsStartWorkoutModalOpen] = useState(false);
+  const [isReportsModalOpen, setIsReportsModalOpen] = useState(false);
+  const [reportsRefreshKey, setReportsRefreshKey] = useState(0);
+  const [todayProgress, setTodayProgress] = useState<any>(null);
 
   useEffect(() => {
     const targetOffset = (3 - (7200 / 10000)) * 226; // 226 is circumference
     setStrokeDashoffset(targetOffset);
   }, []);
+
+  // Fetch today's progress
+  useEffect(() => {
+    const fetchTodayProgress = async () => {
+      try {
+        const token = localStorage.getItem("token") || "";
+        if (token) {
+          const response = await workoutService.getTodayProgress(token);
+          setTodayProgress(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch today's progress:", error);
+      }
+    };
+
+    fetchTodayProgress();
+  }, [reportsRefreshKey]); // Refresh when workouts are completed
+
+  // Dynamic Quick Stats based on real data
+  const quickStats = [
+    { 
+      label: "Workouts Today", 
+      value: todayProgress?.totalWorkouts?.toString() || "0", 
+      trend: "↑", 
+      change: "+0%", 
+      color: "from-emerald-500/20 to-emerald-600/20" 
+    },
+    { 
+      label: "Distance", 
+      value: `${todayProgress?.totalDistance || 0} km`, 
+      trend: "↑", 
+      change: "+0%", 
+      color: "from-blue-500/20 to-blue-600/20" 
+    },
+    { 
+      label: "Calories Burned", 
+      value: `${todayProgress?.totalCalories || 0} kcal`, 
+      trend: "↑", 
+      change: "+0%", 
+      color: "from-orange-500/20 to-orange-600/20" 
+    },
+    { 
+      label: "Active Minutes", 
+      value: `${todayProgress?.totalDuration || 0} min`, 
+      trend: "↑", 
+      change: "+0%", 
+      color: "from-purple-500/20 to-purple-600/20" 
+    },
+  ];
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-black via-black to-black">
@@ -141,10 +189,16 @@ export default function Dashboard() {
 
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-3 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 shadow-lg hover:shadow-green-500/50">
+                <button 
+                  onClick={() => setIsStartWorkoutModalOpen(true)}
+                  className="px-8 py-3 bg-[#A3E635] text-black font-semibold rounded-full hover:bg-green-400 transition-colors duration-200 shadow-lg hover:shadow-green-500/50"
+                >
                   Start Workout
                 </button>
-                <button className="px-8 py-3 border-2 border-[#A3E635] text-[#A3E635] font-semibold rounded-full hover:bg-[#A3E635]/10 transition-colors duration-200">
+                <button 
+                  onClick={() => setIsReportsModalOpen(true)}
+                  className="px-8 py-3 border-2 border-[#A3E635] text-[#A3E635] font-semibold rounded-full hover:bg-[#A3E635]/10 transition-colors duration-200"
+                >
                   View Reports
                 </button>
               </div>
@@ -590,6 +644,23 @@ export default function Dashboard() {
           onClose={() => setSelectedWorkout(null)}
         />
       )}
+
+      {/* Start Workout Modal */}
+      <StartWorkoutModal
+        isOpen={isStartWorkoutModalOpen}
+        onClose={() => setIsStartWorkoutModalOpen(false)}
+        onWorkoutStarted={() => {
+          setReportsRefreshKey((prev) => prev + 1);
+        }}
+      />
+
+      {/* Workout Reports Modal */}
+      <WorkoutReportsModal
+        isOpen={isReportsModalOpen}
+        onClose={() => setIsReportsModalOpen(false)}
+        refreshKey={reportsRefreshKey}
+        onWorkoutCompleted={() => setReportsRefreshKey((prev) => prev + 1)}
+      />
 
     </div>
   );
