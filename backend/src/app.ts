@@ -5,7 +5,6 @@ import authRoutes from "./modules/auth/auth.route";
 import adminRoutes from "./modules/admin/admin.route";
 import workoutRoutes from "./modules/workout/workout.route";
 import path from "path";
-import { connectDB } from "./config/db";
 
 dotenv.config();
 
@@ -22,14 +21,4 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/workout", workoutRoutes);
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI as string;
-
-connectDB(MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
-  })
-  .catch((err) => {
-    console.error("❌ DB connection error:", err);
-    process.exit(1);
-  });
+export default app;
